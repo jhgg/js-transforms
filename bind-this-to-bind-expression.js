@@ -9,14 +9,14 @@
  *
  */
 
-module.exports = function(file, api) {
+module.exports = function (file, api) {
   const j = api.jscodeshift;
 
   return j(file.source)
     .find(j.CallExpression, {callee: {object: {object: j.ThisExpression}}})
-  	.filter(p => p.value.arguments.length == 1 && p.value.arguments[0].type == "ThisExpression")
+    .filter(p => p.value.arguments.length == 1 && p.value.arguments[0].type == "ThisExpression")
     .replaceWith(
       p => j.bindExpression(null, p.value.callee.object)
-    )
+  )
     .toSource();
 };

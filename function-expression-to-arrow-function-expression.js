@@ -26,19 +26,19 @@
  * }
  */
 
-module.exports = function(file, api) {
+module.exports = function (file, api) {
   const j = api.jscodeshift;
 
   return j(file.source)
-  	.find(j.FunctionExpression)
+    .find(j.FunctionExpression)
     // We check for this expression, as if it's in a function expression, we don't want to re-bind "this" by
     // using the arrowFunctionExpression. As that could potentially have some unintended consequences.
     .filter(p => j(p).find(j.ThisExpression).size() == 0)
-  	.replaceWith(p => {
-    	var body = p.value.body;
-    	var useExpression = body.type == 'BlockStatement' && body.body.length == 1 && body.body[0].type == "ReturnStatement";
-        body = useExpression ? body.body[0].argument : body;
-    	return j.arrowFunctionExpression(p.value.params, body, useExpression);
+    .replaceWith(p => {
+      var body = p.value.body;
+      var useExpression = body.type == 'BlockStatement' && body.body.length == 1 && body.body[0].type == "ReturnStatement";
+      body = useExpression ? body.body[0].argument : body;
+      return j.arrowFunctionExpression(p.value.params, body, useExpression);
     })
     .toSource();
 };

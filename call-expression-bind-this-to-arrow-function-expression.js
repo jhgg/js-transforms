@@ -34,9 +34,9 @@ module.exports = function(file, api) {
     .filter(p => p.value.arguments.length == 1 && p.value.arguments[0].type == "ThisExpression")
   	.replaceWith(p => {
     	var body = p.value.callee.object.body;
-    	var useExpression = body.type == 'BlockStatement' && body.body.length == 1 && body.body[0].type == "ReturnStatement";
-        body = useExpression ? body.body[0].argument : body;
-    	return j.arrowFunctionExpression(p.value.callee.object.params, body, useExpression);
+      var useExpression = body.type == 'BlockStatement' && body.body.length == 1 && body.body[0].type == "ReturnStatement";
+      body = useExpression ? body.body[0].argument : body;
+      return j.arrowFunctionExpression(p.value.callee.object.params, body, useExpression);
     })
     .toSource();
 };
