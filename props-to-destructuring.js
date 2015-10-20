@@ -118,7 +118,7 @@ module.exports = function (file, api) {
         const nodePath = propDefinitions.paths()[0];
         const node = nodePath.value;
         const newPattern = j.objectPattern(node.id.properties.concat(properties));
-        nodePath.replace(j.variableDeclarator(newPattern, node.init))
+        nodePath.replace(j.variableDeclarator(newPattern, node.init));
         return p.value;
       }
 
